@@ -1,0 +1,92 @@
+service: petstore
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: us-east-1
+ # role: arn:aws:iam::316218237083:role/ServerlessDemo
+  environment:
+    DYNAMODB_TABLE_NAME: ${self:custom.petTableName}
+  
+custom:
+  petTableName: pet-table-${self:provider.stage}
+
+plugins: 
+  - serverless-iam-roles-per-function
+
+functions:
+  getPet:
+    handler: index.findPet
+    name: findPet
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: /pet/{petId}
+          method: GET
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb::GetItem"
+        Resource: !GetAtt PetTable.Arn
+  addPet: 
+    handler: index.createPet
+    name: createPet
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: /pet
+          method: POST
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb::PutItem"
+        Resource: !GetAtt PetTable.Arn
+  updatePet: 
+    handler: index.updatePet
+    name: updatePet
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: /pet
+          method: PUT
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb::UpdateItem"
+        Resource: !GetAtt PetTable.Arn
+  deletePet: 
+    handler: index.deletePet
+    name: deletePet
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: /pet/{petId}
+          method: DELETE
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb::DeleteItem"
+        Resource: !GetAtt PetTable.Arn
+
+resources:
+  Resources:
+    PetTable: 
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.petTableName}
+        AttributeDefinitions:
+          - AttributeName: pet_id
+            AttributeType: N
+        KeySchema: 
+          - AttributeName: pet_id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+

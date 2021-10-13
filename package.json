@@ -1,0 +1,30 @@
+{
+  "name": "plasmatic-project",
+  "version": "1.0.0",
+  "description": "This is the implementation of https://petstore.swagger.io/",
+  "main": "index.js",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.34.0",
+    "@aws-sdk/util-dynamodb": "^3.34.0",
+    "aws-sdk": "^2.991.0",
+    "jest": "^27.2.1",
+    "lambda-tester": "^4.0.1",
+    "node": "^14.9.0",
+    "serverless-iam-roles-per-function": "^3.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "RESTful",
+    "API",
+    "AWS",
+    "NodeJS",
+    "Lambda",
+    "Jest",
+    "React"
+  ],
+  "author": "Joao Freitas",
+  "license": "ISC"
+}
