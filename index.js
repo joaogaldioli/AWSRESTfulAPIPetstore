@@ -11,8 +11,8 @@ const {marshall, unmarshall} = require("@aws-sdk/util-dynamodb");
 const AWS = require('aws-sdk');
 AWS.config.update({
     region: 'us-east-1',
-    accessKeyId: "AKIAUTIATMCNZZSH4XZV",
-    secretAccessKey: "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"
+    accessKeyId: "",
+    secretAccessKey: ""
 });
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 
